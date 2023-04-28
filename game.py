@@ -1,6 +1,8 @@
 #import sys
 import pygame
 import button
+import demo_camera # how to use demo camera in game?
+import random
 
 pygame.init()
 
@@ -67,13 +69,16 @@ while run:
      #   menu_state = "main"
   else: # during the game
     draw_text("Press SPACE to pause", font, text_col, 160, 250)
-    import string
-    import random
 
-    # randomly choose a letter from A-Z except J, Z
+    # randomly choose a letter from A-Z except J, Z #################################
     chars = 'abcdefghiklmnopqrstuvwxy'
     randomLetter = random.choice(chars)
-    draw_text(randomLetter, font, text_col, 125, 250)
+    draw_text(randomLetter, font, text_col, 125, 250) 
+    #pygame.time.set_timer(2)
+    # need to be able to code so that the game displays text, the person shows the hand shape
+    # and if it's right it moves onto the next one and adds a score
+#################################
+
   #event handler
   for event in pygame.event.get():
     if event.type == pygame.KEYDOWN:
