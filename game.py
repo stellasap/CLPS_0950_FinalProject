@@ -1,8 +1,9 @@
 #import sys
 import pygame
-import button
-import demo_camera # how to use demo camera in game?
+from Camille import button
+#import demo_camera # how to use demo camera in game?
 import random
+from Camille import anim
 
 pygame.init()
 
@@ -25,13 +26,13 @@ text_col = (255, 255, 255) # white
 
 #load button images
 #start_img = pygame.image.load("images/start_button.jpeg").convert_alpha()
-resume_img = pygame.image.load("images/start_button.jpeg").convert_alpha()
+resume_img = pygame.image.load(anim("images/start_button_gif.gif")).convert_alpha()
 quit_img = pygame.image.load("images/exit_button.jpeg").convert_alpha()
 #back_img = pygame.image.load('images/back_button.jpeg').convert_alpha()
 
 #create button instances
 #start_button = button.Button(255, 125, start_img, 0.2)
-resume_button = button.Button(304, 125, resume_img, 0.2)
+resume_button = button.Button(304, 125, resume_img, 0.5)
 quit_button = button.Button(336, 375, quit_img, 0.2)
 #back_button = button.Button(332, 450, back_img, 0.2)
 
@@ -73,7 +74,7 @@ while run:
     # randomly choose a letter from A-Z except J, Z #################################
     chars = 'abcdefghiklmnopqrstuvwxy'
     randomLetter = random.choice(chars)
-    draw_text(randomLetter, font, text_col, 125, 250) 
+    draw_text(randomLetter, font, text_col, 125, 250) # how to make it disp only one?
     #pygame.time.set_timer(2)
     # need to be able to code so that the game displays text, the person shows the hand shape
     # and if it's right it moves onto the next one and adds a score
