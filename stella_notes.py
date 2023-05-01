@@ -18,9 +18,9 @@
 #connect game aspect made by Camille to detection aspect made by Stella= project :)
 
 #notes for MMLab 
-# 1. download and install miniconda
-# 2. create conda environment and activate it?
-# 3. install pytorch
+# 1. download and install miniconda-- done 04/28
+# 2. create conda environment and activate it? --done 04/28
+# 3. install pytorch-- done 04/28
 # 4. Install MMEngine and MMCV using MIM
 
 
@@ -97,3 +97,10 @@ test_dataloader = val_dataloader
 
 #datasets: many option in the MMPose detector, recommended is COCO, which I would have to download and train to apply to the hand signals
 #https://mmpose.readthedocs.io/en/v0.29.0/demo.html#d-hand-keypoint-demo
+
+
+#05/01/2023
+#problem that Stella has been facing:
+# the miniconda installed but maybe not in the right directory? it is in my computer but won't listen to python and install the rest of the things I need 
+# maybe need to uninstall and install again, have been stuck on that for the entire weekend
+#
