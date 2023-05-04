@@ -124,3 +124,8 @@ test_dataloader = val_dataloader
 
 #6. Evaluate the model: After training, evaluate the model using the tools/test.py script. 
 #  use the --config argument to specify the configuration file for your model.
+
+#COCO annotator- downloaded on 05/03 and started uploading images on the online platform to annotate
+#labelImg downloaded and installed on 05/03
+
+#got labelImg to open but it quits every time I try to label and image. I will ask Ivan for help
