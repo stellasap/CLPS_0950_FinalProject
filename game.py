@@ -26,7 +26,7 @@ text_col = (255, 255, 255) # white
 
 #load button images
 #start_img = pygame.image.load("images/start_button.jpeg").convert_alpha()
-resume_img = pygame.image.load(anim("images/start_button_gif.gif")).convert_alpha()
+resume_img = pygame.image.load("images/start_button_gif.gif").convert_alpha()
 quit_img = pygame.image.load("images/exit_button.jpeg").convert_alpha()
 #back_img = pygame.image.load('images/back_button.jpeg').convert_alpha()
 
@@ -76,8 +76,13 @@ while run:
     randomLetter = random.choice(chars)
     draw_text(randomLetter, font, text_col, 125, 250) # how to make it disp only one?
     #pygame.time.set_timer(2)
+    pygame.time.delay(3000)
     # need to be able to code so that the game displays text, the person shows the hand shape
-    # and if it's right it moves onto the next one and adds a score
+    # and if it's right it moves onto the next one and adds a score -- code something to 
+    # reference back to Stella's code to see if it matches shape and if it returns 
+    # # # # # MAYBE: with each letter, press the letter when you're ready to sign 
+                  #  and then it will countdown to take a picture of you and then see if it matches
+
 #################################
 
   #event handler
@@ -85,6 +90,34 @@ while run:
     if event.type == pygame.KEYDOWN:
       if event.key == pygame.K_SPACE:
         game_paused = True
+      if event.key == pygame.K_a:
+        draw_text("a", font, text_col, 130, 240)
+        # call Stella's function with (A)
+      #if event.key == pygame.K_b:
+      #if event.key == pygame.K_c:
+      #if event.key == pygame.K_d:
+      #if event.key == pygame.K_e:
+      #if event.key == pygame.K_f:
+      #if event.key == pygame.K_g:
+      #if event.key == pygame.K_h:
+      # if event.key == pygame.K_i:
+      # if event.key == pygame.K_k:
+      # if event.key == pygame.K_l:
+      # if event.key == pygame.K_m:
+      # if event.key == pygame.K_n:
+      # if event.key == pygame.K_o:
+      # if event.key == pygame.K_p:
+      # if event.key == pygame.K_q:
+      # if event.key == pygame.K_r:
+      # if event.key == pygame.K_s:
+      # if event.key == pygame.K_t:
+      # if event.key == pygame.K_u:
+      # if event.key == pygame.K_v:
+      # if event.key == pygame.K_w:
+      # if event.key == pygame.K_x:
+      # if event.key == pygame.K_y:
+
+
     if event.type == pygame.QUIT:
       run = False
 
