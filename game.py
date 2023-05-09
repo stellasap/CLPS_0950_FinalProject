@@ -1,3 +1,7 @@
+# TO DO:
+# make falling letters. when person clicks on a letter it will ask them to sign it after a countdown. 
+# after countdown, will take snapshot and send it to Stella's code. stella's code will compare it to database
+
 #import sys
 import pygame
 from Camille import button
@@ -43,13 +47,13 @@ quit_button = button.Button(250, 375, quit_img, 0.6)
 def draw_text(text, font, text_col, x, y): # so you don't have to blit every time
   img = font.render(text, True, text_col)
   screen.blit(img, (x, y))
+  pygame.display.update()
 
 # MAKING CLOCK COUNTDOWN TIMER 
 clock = pygame.time.Clock()
-clock_counter = 5
 clock_text = font.render(str(clock_counter), True, (0, 25, 0))
 
-timer_event = pygame.USEREVENT+1
+timer_event = pygame.USEREVENT+0
 pygame.time.set_timer(timer_event, 1000)
 
 #game loop
@@ -91,15 +95,45 @@ while run:
     pretty_background = pygame.image.load("images/game_background.jpeg").convert_alpha() 
     # draw on image onto another
     screen.blit(pretty_background,(0,0))
-
-
-
     screen_display.update()
-            
+
+    letter = get_letter(1)
+    draw_text(letter, font, (0, 0, 0), 125, 250)
+
+    pygame.time.delay(1000)
+    clock_counter = 5   
+    event.type == timer_event
+      clock_counter -= 1
+      text = font.render(str(clock_counter), True, (0, 0, 0))
+      text_rect = text.get_rect(center = screen.get_rect().center)
+      screen.blit(text, text_rect)
+      if clock_counter == 0:
+        pygame.time.set_timer(timer_event, 0) # set to 0 means end countdown  
+    pygame.time.delay(2000)
+    
+
     # randomly choose a letter from A-Z except J, Z #################################
 
+    # delay after each event
+
     clock.tick(60) # >= 60 fps
-      
+    # for event in pygame.event.get():  
+    #  if event.type == pygame.KEYDOWN:
+    #   if event.key == pygame.K_RIGHT: # if ready to move on
+
+      # letter = get_letter(1)
+      # draw_text(letter, font, (0, 0, 0), 125, 250)
+      # pygame.time.delay(1000)        
+           # event.type == timer_event
+           # clock_counter -= 1
+           # text = font.render(str(clock_counter), True, (0, 0, 0))
+           # text_rect = text.get_rect(center = screen.get_rect().center)
+           # screen.blit(text, text_rect)
+           # if clock_counter == 0:
+           #   pygame.time.set_timer(timer_event, 0) # set to 0 means end countdown  
+
+
+
     # need to be able to code so that the game displays text, the person shows the hand shape
     # and if it's right it moves onto the next one and adds a score -- code something to 
     # reference back to Stella's code to see if it matches shape and if it returns 
@@ -113,16 +147,6 @@ while run:
     if event.type == pygame.KEYDOWN:
       if event.key == pygame.K_SPACE:
         game_paused = True
-      if event.key == pygame.K_RIGHT: # if ready to move on
-        letter = get_letter(1)
-        draw_text(letter, font, (0, 0, 0), 125, 250)
-        event.type == timer_event
-        clock_counter -= 1
-        text = font.render(str(clock_counter), True, (0, 0, 0))
-        text_rect = text.get_rect(center = screen.get_rect().center)
-        screen.blit(text, text_rect)
-        if clock_counter == 0:
-          pygame.time.set_timer(timer_event, 5)  
 
         #pygame.display.flip()
       
