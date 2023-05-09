@@ -10,6 +10,7 @@ import random
 from Camille import anim
 import gradio as gr
 from get_letter import get_letter
+#from Camille import capture_img
 
 pygame.init()
 
@@ -51,6 +52,9 @@ def draw_text(text, font, text_col, x, y): # so you don't have to blit every tim
 
 # MAKING CLOCK COUNTDOWN TIMER 
 clock = pygame.time.Clock()
+clock_counter = 5   
+text = font.render(str(clock_counter), True, (0, 0, 0))
+text_rect = text.get_rect(center = screen.get_rect().center)
 clock_text = font.render(str(clock_counter), True, (0, 25, 0))
 
 timer_event = pygame.USEREVENT+0
@@ -98,19 +102,22 @@ while run:
     screen_display.update()
 
     letter = get_letter(1)
-    draw_text(letter, font, (0, 0, 0), 125, 250)
+    draw_text(letter, font, (0, 0, 0), 150, 250)
 
-    pygame.time.delay(1000)
-    clock_counter = 5   
+    pygame.time.delay(2000)  
     event.type == timer_event
+    for num in range(5,-1,-1):
       clock_counter -= 1
-      text = font.render(str(clock_counter), True, (0, 0, 0))
-      text_rect = text.get_rect(center = screen.get_rect().center)
-      screen.blit(text, text_rect)
-      if clock_counter == 0:
-        pygame.time.set_timer(timer_event, 0) # set to 0 means end countdown  
-    pygame.time.delay(2000)
-    
+      #screen.blit(text, text_rect)
+      draw_text(str(num), font, (0,0,0), 250, 250)
+      # screen_display.update()
+      pygame.time.delay(1000)
+    if clock_counter == 0:
+      pygame.time.set_timer(timer_event, 0) # set to 0 means end countdown  
+      pygame.time.delay(2000)
+      #capture_img()
+
+
 
     # randomly choose a letter from A-Z except J, Z #################################
 
