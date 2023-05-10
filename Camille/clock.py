@@ -44,7 +44,7 @@ while run:
     for e in pygame.event.get():
         if e.type == pygame.USEREVENT: 
             counter -= 1
-            text = str(counter).rjust(3) if counter > 0 else 'boom!'
+            text = str(counter).rjust(3) if counter > 0 else 'Pose!'
         if e.type == pygame.QUIT: 
             run = False
 

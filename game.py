@@ -11,11 +11,15 @@ from Camille import anim
 import gradio as gr
 from get_letter import get_letter
 #from Camille import capture_img
+import pygame.camera
+import pygame.image
+import sys
+import os
 
 pygame.init()
 
-screen_w = 700
-screen_h = 700
+screen_w = 640
+screen_h = 480
 
 screen = pygame.display.set_mode((screen_w, screen_h)) #idky but it needs 2 parentheses
 pygame.display.set_caption("Menu")
@@ -34,15 +38,22 @@ text_col = (255, 255, 255) # white
 #load button images
 #start_img = pygame.image.load("images/start_button.jpeg").convert_alpha()
 resume_img = pygame.image.load("images/start_button.png").convert_alpha()
+#asl_img = pygame.image.load("images/qmark_button.jpeg").convert_alpha()
 quit_img = pygame.image.load("images/exit_button.jpeg").convert_alpha()
+
 main_menu_background = pygame.image.load("images/asl_background.jpeg").convert_alpha()
-main_menu_background = pygame.transform.scale(main_menu_background, (700, 700))
+main_menu_background = pygame.transform.scale(main_menu_background, (640, 400))
+
+# asl_review = pygame.image.load("images/asl_review.png").convert_alpha() 
+# asl_review = pygame.transform.scale(asl_review, (640, 480))
+
 #back_img = pygame.image.load('images/back_button.jpeg').convert_alpha()
 
 #create button instances
 #start_button = button.Button(255, 125, start_img, 0.2)
-resume_button = button.Button(250, 125, resume_img, 0.9)
-quit_button = button.Button(250, 375, quit_img, 0.6)
+resume_button = button.Button(100, 400, resume_img, 0.7)
+#asl_button = button.Button(200, 145, asl_img, 0.2)
+quit_button = button.Button(400, 400, quit_img, 0.4)
 #back_button = button.Button(332, 450, back_img, 0.2)
 
 def draw_text(text, font, text_col, x, y): # so you don't have to blit every time
@@ -52,10 +63,6 @@ def draw_text(text, font, text_col, x, y): # so you don't have to blit every tim
 
 # MAKING CLOCK COUNTDOWN TIMER 
 clock = pygame.time.Clock()
-clock_counter = 5   
-text = font.render(str(clock_counter), True, (0, 0, 0))
-text_rect = text.get_rect(center = screen.get_rect().center)
-clock_text = font.render(str(clock_counter), True, (0, 25, 0))
 
 timer_event = pygame.USEREVENT+0
 pygame.time.set_timer(timer_event, 1000)
@@ -63,21 +70,32 @@ pygame.time.set_timer(timer_event, 1000)
 #game loop
 run = True
 while run:
-  
   #screen.fill((150, 100, 150)) # color
 
   #check if game is paused
   if game_paused == True:
     #check menu state
     if menu_state == "main":
+      screen.fill((0,0,0))
       screen.blit(main_menu_background, (0,0))
+      pygame.display.set_caption("Menu")
       #draw pause screen buttons
       if resume_button.draw(screen):
         game_paused = False
-    #  if options_button.draw(screen):
-    #    menu_state = "options"
+      # if person wants to review ASL Alphabet
+      # if asl_button.draw(screen):
+      #  # pygame.event.clear()
+      #   pygame.display.set_caption('PRESS SPACE TO GO BACK')    
+      #   screen.fill(asl_review,(0,0))
+      #   pygame.display.update()
+      #   for event in pygame.event.get():
+      #     if event.type == pygame.KEYDOWN:
+      #       if event.key == pygame.K_SPACE:
+      #         game_paused = True
+        
       if quit_button.draw(screen):
         run = False
+
     #check if the options menu is open
     #if menu_state == "options":
       #draw the different options buttons
@@ -91,30 +109,87 @@ while run:
      #   menu_state = "main"
   else: # during the game
   ####### BACKDROP
+    #pygame.time.delay(3000)
 
-    screen_display = pygame.display   
+    screen_display = pygame.display
+    pygame.display.set_mode((screen_w, screen_h))
     # Set caption of screen
-    screen_display.set_caption('PRESS SPACE TO PAUSE')    
+    pygame.display.set_caption('PRESS SPACE TO PAUSE')    
     # set the image which to be displayed on screen
     pretty_background = pygame.image.load("images/game_background.jpeg").convert_alpha() 
     # draw on image onto another
     screen.blit(pretty_background,(0,0))
+    
+    letter = get_letter(1)
+    letter_font = pygame.font.SysFont("antiquewhite", 650)
+    letter = letter_font.render(letter, True, (0, 0, 0))
+    screen.blit(letter,(190, 12)) # make this big and centered\
+    
     screen_display.update()
 
-    letter = get_letter(1)
-    draw_text(letter, font, (0, 0, 0), 150, 250)
+    draw_text("Sign the Letter:", font, (0,0,0), 190, 0)
+    screen_display.update()
 
-    pygame.time.delay(2000)  
+    pygame.time.delay(5000)
+
+    pygame.camera.init()
+    cameras = pygame.camera.list_cameras()
+    print("Using camera %s ..." % cameras[0])
+    webcam = pygame.camera.Camera(cameras[0])
+    webcam.start()
+    img = webcam.get_image()
+    WIDTH = img.get_width()
+    HEIGHT = img.get_height()
+    screen = pygame.display.set_mode( ( WIDTH, HEIGHT ) )
+    pygame.display.set_caption("pyGame Camera View")
+   
+    img = webcam.get_image()
+    screen.blit(img, (0,0))
+
+    pygame.display.flip()
+  # pygame.time.delay(1000) # delay longer , play countdown while showing the camera
+
+     # grab next frame    
+    img = webcam.get_image()
+    screen.blit(img, (0,0))
+    pygame.display.flip()
+    
+    directory = r'/Users/camilleaquino/Documents/GitHub/CLPS_0950_FinalProject/images/'
+  
+    # screen.blit(img, (0,0))
+    # pygame.display.flip()
+    #pygame.time.delay(3000) # countdown into taking picture?
+    
     event.type == timer_event
-    for num in range(5,-1,-1):
+    clock_counter = 5   
+    clock_text = font.render(str(clock_counter), True, (0, 25, 0))
+    for num in range(clock_counter,0,-1):
+      #screen.fill(pygame.Color("black")) # erases the entire screen surface
+      img = webcam.get_image()
+      screen.blit(img, (0,0))
+      text = font.render(str(clock_counter), True, (255, 255, 255))
+      text_rect = text.get_rect(center = screen.get_rect().center)
+      screen.blit(text, text_rect)
+     # draw_text(str(num), font, (0,0,0), 250, 250)
+      screen_display.update()
+
       clock_counter -= 1
-      #screen.blit(text, text_rect)
-      draw_text(str(num), font, (0,0,0), 250, 250)
-      # screen_display.update()
+
       pygame.time.delay(1000)
-    if clock_counter == 0:
-      pygame.time.set_timer(timer_event, 0) # set to 0 means end countdown  
-      pygame.time.delay(2000)
+
+      if clock_counter == 0:
+       img = webcam.get_image()
+       screen.blit(img, (0,0))
+       post_font = pygame.font.SysFont("arialblack", 100)
+       get_ready = post_font.render("Pose!", True, (255, 255, 255))
+       get_ready_rect = get_ready.get_rect(center = screen.get_rect().center)
+       screen.blit(get_ready, get_ready_rect)
+       pygame.time.set_timer(timer_event, 0) # set to 0 means end countdown  
+       filename = os.path.join(directory,"image.jpeg")
+       pygame.image.save(img, filename) #don't have to save because you just want to use it and send it to stella's
+       pretty_background = pygame.transform.scale(pretty_background, (WIDTH, HEIGHT))
+       screen_display.update()
+       pygame.time.delay(2000)
       #capture_img()
 
 

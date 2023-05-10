@@ -3,6 +3,7 @@ import pygame.camera
 from pygame.locals import *
 import sys # to access the system
 import cv2
+import os 
 
 pygame.init()
 pygame.camera.init()
@@ -18,7 +19,7 @@ cameras = pygame.camera.list_cameras()
 
 print("Using camera %s ..." % cameras[0])
 
-directory = r'C:\Users\Github\CLPS_0950_FinalProject\images\''
+directory = r'/Users/camilleaquino/Documents/GitHub/CLPS_0950_FinalProject/images/'
 
 
 webcam = pygame.camera.Camera(cameras[0])
@@ -28,34 +29,39 @@ webcam.start()
 # grab first frame
 
 
-pygame.time.delay(1000)
+pygame.time.delay(1000) # delay longer , play countdown while showing the camera
 
 img = webcam.get_image()
 
-pygame.image.save(img, "image.jpeg") #don't have to save because you just want to use it and send it to stella's
-
 WIDTH = img.get_width()
 HEIGHT = img.get_height()
+print(WIDTH)
+print(HEIGHT)
 
 screen = pygame.display.set_mode( ( WIDTH, HEIGHT ) )
 pygame.display.set_caption("pyGame Camera View")
+screen.blit(img, (0,0))
+pygame.display.flip()
+img = webcam.get_image()
+
+pygame.time.delay(3000) # countdown into taking picture?
+
+filename = os.path.join(directory,"image.jpeg")
+pygame.image.save(img, filename) #don't have to save because you just want to use it and send it to stella's
 
 
 while True :
     for e in pygame.event.get() :
-        if e.type == pygame.QUIT :
-            #pygame.image.load(img)
-            sys.exit()
+       if e.type != timer_event :
+         # pygame.image.load(img)
+         sys.exit()
             
-            
-
-
-
     # draw frame
     screen.blit(img, (0,0))
     pygame.display.flip()
     # grab next frame    
-    #img = webcam.get_image()
+    img = webcam.get_image()
+            
 
    
 # NEXT STEPS: SAVE IMAGE INTO IMAGES folders#######################################
