@@ -1,3 +1,4 @@
+# maybe don't need this if not making gif, BUT could have person dancing at end ("You win!")
 class Anim(object):
     """A class to simplify the act of adding animations to sprites."""
     def __init__(self, frames, fps, loops=-1):
