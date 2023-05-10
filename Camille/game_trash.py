@@ -362,5 +362,10 @@ while run:
 
 
 
+#=========
+
+#  score_rect = score_text.get_rect(center = screen.get_rect().center)
+    # (left line, top line, right line, bottom line)
+
 
 

@@ -4,6 +4,7 @@
 # Add comments / clean up
 
 import pygame
+#pygame.font.get_fonts()
 from Camille import button
 from Camille import anim
 from get_letter import get_letter
@@ -28,6 +29,7 @@ font = pygame.font.SysFont("arialblack", 35)
 pose_font = pygame.font.SysFont("arialblack", 100)
 bigger_font_true = pygame.font.SysFont("arialblack", 110)
 bigger_font_false = pygame.font.SysFont("arialblack", 90)
+score_font = pygame.font.SysFont("menlo", 16, italic=True)
 
 # colors
 white_col = (255, 255, 255) # white
@@ -35,6 +37,7 @@ black_col = (0,0,0) # black
 red_col = (255,0,0)
 green_col = (0,255,0)
 blue_col = (0,0,255)
+purple_col = (160, 32, 240)
 
 #load button images
 resume_img = pygame.image.load("images/start_button.png").convert_alpha()
@@ -50,16 +53,51 @@ main_menu_background = pygame.transform.scale(main_menu_background, (640, 400))
 pretty_background = pygame.image.load("images/game_background.jpeg").convert_alpha() 
 #pretty_background = pygame.transform.scale(pretty_background, (640, 400))
 
+# Game pictures
+bear_head = pygame.image.load("images/bear_head.png").convert_alpha()
+bear_honey = pygame.image.load("images/bear_honey.png").convert_alpha()
+bear_honey = pygame.transform.scale(bear_honey, (80, 80))
+
+
+bear_w_heart = pygame.image.load("images/bear_heart.png").convert_alpha()
+cute_bear = pygame.image.load("images/cute_bear.png").convert_alpha()
+cute_bear = pygame.transform.scale(cute_bear, (60, 60))
+
+empty_heart = pygame.image.load("images/empty_heart.png").convert_alpha()
+footpath = pygame.image.load("images/footpath.png").convert_alpha()
+full_heart = pygame.image.load("images/full_heart.png").convert_alpha()
+heart = pygame.image.load("images/heart.png").convert_alpha()
+
+honey = pygame.image.load("images/honey.png").convert_alpha()
+honey = pygame.transform.scale(honey, (50, 50))
+
+minus_10 = pygame.image.load("images/minus_10.png").convert_alpha()
+minus_20 = pygame.image.load("images/minus_20.png").convert_alpha()
+minus_30 = pygame.image.load("images/minus_30.png").convert_alpha()
+minus_40 = pygame.image.load("images/minus_40.png").convert_alpha()
+
 def draw_text(text, font, text_col, x, y): # Draws text onto screen, call this so you don't have to 'blit' text every time
   img = font.render(text, True, text_col)
   screen.blit(img, (x, y))
   pygame.display.update()
+
+def disp_score(score, score_font, x, y): # display score
+  score_text = score_font.render(f'Score: {score}', True, white_col)
+  screen.blit(score_text, (x, y)) 
+#  pygame.display.flip()
+
+#  pygame.draw.rect(surface, color, pygame.Rect(30, 30, 60, 60), 2) # 2 means only the boundaries
+  pygame.display.flip()
 
 # MAKING CLOCK COUNTDOWN TIMER 
 clock = pygame.time.Clock()
 timer_event = pygame.USEREVENT+0
 pygame.time.set_timer(timer_event, 1000)
 clock.tick(60) # 60 frames can pass per sec (max)
+
+# Score Keeping
+score = 0
+score_inc = 10
 
 #game loop
 run = True
@@ -92,13 +130,43 @@ while run:
     screen.blit(pretty_background,(0,0))
     
     # Random letterfrom A-Z (except J, Z) gets displayed
+    pygame.display.flip()
 
+    screen.blit(footpath, (0,410))
+    screen.blit(cute_bear, (575, 370))
+
+    if score == 0:
+      screen.blit(honey, (0,370))
+    elif score == 10:
+      screen.blit(honey, (100,400))
+    elif score == 20:
+      screen.blit(honey, (200,400))
+    elif score == 30:
+      screen.blit(honey, (300,400))
+    elif score == 40:
+      screen.blit(honey, (400,400))
+    elif score == 50:
+      screen.blit(honey, (500,400))
+    elif score == 60:
+      screen.blit(bear_honey, (570, 370))
+      draw_text("You win! Feel free to keep practicing :)", font, white_col, (0,0))
+
+
+#    pygame.draw.rect(screen, purple_col, (0, 450, 640, 80))
+    pygame.draw.rect(screen, black_col, (0, 445, 200, 30))
+    disp_score(score, score_font, 10, 450) # (width, height)
+    
+
+
+
+    
     letter = get_letter(1)
     small_letter = letter # to be displayed with webcame footage
     letter_font = pygame.font.SysFont("antiquewhite", 650)
     letter = letter_font.render(letter, True, black_col)
     screen.blit(letter,(190, 15)) # make this big and centered
-    draw_text("Sign the Letter:", font, black_col, 190, 0)
+    draw_text("Sign the letter to feed Bruno!", font, black_col, 50, 0)
+
     screen_display.update()
 
     pygame.time.delay(3000)
@@ -119,6 +187,9 @@ while run:
     screen = pygame.display.set_mode( ( WIDTH, HEIGHT ) )
     img = webcam.get_image()
     screen.blit(img, (0,0))
+
+    disp_score(score, score_font, 10, 10)
+
     pygame.display.flip()
     
     # (For Debugging purposes): now image will be sent to images folder so we can check that it's screenshotting at the right time
@@ -146,6 +217,7 @@ while run:
 
       # At Countdown = 0, take a picture
       if clock_counter == 0:
+       
        img = webcam.get_image()
        screen.blit(img, (0,0))
        get_ready = pose_font.render("Pose!", True, white_col)
@@ -165,14 +237,24 @@ while run:
        stella_func = True
        if stella_func:
          screen.fill(black_col)
+        
+         score += score_inc
+         disp_score(score, score_font, 10, 10)
+
          draw_text("CORRECT!", bigger_font_true, green_col, 0, 168)
          pygame.time.delay(2000)
+      
+
 
         #  ADD POINTS
-          
+
 
        else:
         screen.fill(black_col)
+        
+        score -= score_inc
+        disp_score(score, score_font, 10, 10)
+        
         draw_text("INCORRECT!", bigger_font_false, red_col, 0, 168)
         pygame.time.delay(2000)
         
