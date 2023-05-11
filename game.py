@@ -60,21 +60,35 @@ bear_honey = pygame.transform.scale(bear_honey, (80, 80))
 
 
 bear_w_heart = pygame.image.load("images/bear_heart.png").convert_alpha()
+bear_w_heart = pygame.transform.scale(bear_w_heart, (300,300))
+
 cute_bear = pygame.image.load("images/cute_bear.png").convert_alpha()
 cute_bear = pygame.transform.scale(cute_bear, (60, 60))
 
 empty_heart = pygame.image.load("images/empty_heart.png").convert_alpha()
+empty_heart = pygame.transform.scale(empty_heart, (30, 30))
+
 footpath = pygame.image.load("images/footpath.png").convert_alpha()
 full_heart = pygame.image.load("images/full_heart.png").convert_alpha()
+
 heart = pygame.image.load("images/heart.png").convert_alpha()
+heart = pygame.transform.scale(heart, (30, 30))
+
 
 honey = pygame.image.load("images/honey.png").convert_alpha()
 honey = pygame.transform.scale(honey, (50, 50))
 
 minus_10 = pygame.image.load("images/minus_10.png").convert_alpha()
+minus_10 = pygame.transform.scale(minus_10, (30, 30))
+
 minus_20 = pygame.image.load("images/minus_20.png").convert_alpha()
+minus_20 = pygame.transform.scale(minus_20, (30, 30))
+
 minus_30 = pygame.image.load("images/minus_30.png").convert_alpha()
+minus_30 = pygame.transform.scale(minus_30, (30, 30))
+
 minus_40 = pygame.image.load("images/minus_40.png").convert_alpha()
+minus_40 = pygame.transform.scale(minus_40, (30, 30))
 
 def draw_text(text, font, text_col, x, y): # Draws text onto screen, call this so you don't have to 'blit' text every time
   img = font.render(text, True, text_col)
@@ -97,6 +111,7 @@ clock.tick(60) # 60 frames can pass per sec (max)
 
 # Score Keeping
 score = 0
+hits = 0
 score_inc = 10
 
 #game loop
@@ -134,6 +149,16 @@ while run:
 
     screen.blit(footpath, (0,410))
     screen.blit(cute_bear, (575, 370))
+    screen.blit(heart, (590, 340))
+    screen.blit(empty_heart, (590, 340))
+    screen.fill(black_col)
+    draw_text("You killed Bruno >.< !!", font, white_col, 0, 0)
+    draw_text("HOW COULD YOU!!", font, white_col, 0, 30)
+    draw_text("keep practicing :)", font, white_col, 0, 55)
+    pygame.display.flip()
+    pygame.time.delay(5000)
+
+  # Moving the honey
 
     if score == 0:
       screen.blit(honey, (0,370))
@@ -149,7 +174,33 @@ while run:
       screen.blit(honey, (500,400))
     elif score == 60:
       screen.blit(bear_honey, (570, 370))
-      draw_text("You win! Feel free to keep practicing :)", font, white_col, (0,0))
+    elif score >= 70:
+      screen.fill(white_col)
+      draw_text("You win! Feel free to", font, black_col, 0, 0)
+      draw_text("keep practicing :)", font, black_col, 0, 30)
+      screen.blit(bear_w_heart, (180,100))
+      pygame.display.flip()
+      pygame.time.delay(5000)
+
+# If you make a mistake, you hurt Bruno's heart!
+    if hits == 1:
+      screen.blit(minus_10, (590, 340))
+    if hits == 2:
+      screen.blit(minus_20, (590, 340))
+    if hits == 3:
+      screen.blit(minus_30, (590, 340))
+    if hits == 4:
+      screen.blit(minus_40, (590, 340))
+    if hits == 5:
+      screen.blit(empty_heart, (590, 340))
+    if hits == 6:
+      screen.fill(black_col)
+      draw_text("You killed Bruno >.< !! HOW COULD YOU!! ", font, white_col, 0, 0)
+      draw_text("keep practicing :)", font, white_col, 0, 30)
+      pygame.display.flip()
+      pygame.time.delay(5000)
+
+    
 
 
 #    pygame.draw.rect(screen, purple_col, (0, 450, 640, 80))
