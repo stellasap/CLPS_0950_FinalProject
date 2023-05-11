@@ -15,7 +15,7 @@ import random
 import import_pickle
 import cv2
 from pathlib import Path 
-from mmdetection.mmdet.apis import MMPoseInferencer
+from mmpose.apis import MMPoseInferencer
 
 # Start Pygame
 pygame.init()
@@ -119,7 +119,8 @@ import pickle
 # open a file, where you stored the pickled data
 
 def prediction(im):
-        file = open('clf.sav', 'rb')
+        
+        file = open('/Users/stellasapantzi/Desktop/GitHub/CLPS_0950_FinalProject/clf.sav', 'rb')
 
         # dump information to that file
         clf = pickle.load(file)
@@ -136,7 +137,7 @@ def prediction(im):
         newx = [(x-x1)/(x2-x1) for x in x]
         newy = [(y-y1)/(y2-y1) for y in y]
         sample = newx+newy 
-        pred = clf.predict(im)[0]
+        pred = clf.predict([sample])[0]
         
         # print(type(im))
         # for x,y in zip(detx,dety):
@@ -183,6 +184,11 @@ score_inc = 10
 
 #game loop
 run = True
+
+import cv2
+
+cap = cv2.VideoCapture(0)
+
 while run:
 
   #check if game is paused
@@ -286,18 +292,23 @@ while run:
     # Start the camera, display webcam footage
     #     NOTE: sometimes my iphone connects with my laptop and it gets confused about which camera to display from
     #     just run and start the game again
-    pygame.camera.init()
-    cameras = pygame.camera.list_cameras() # tells code which camera to use
-    print("Using camera %s ..." % cameras[0])  
-    webcam = pygame.camera.Camera(cameras[0])
-    webcam.start()
+
+    
+    #pygame.camera.init()
+    #cameras = pygame.camera.list_cameras() # tells code which camera to use
+    #print(cameras)
+    #print("Using camera %s ..." % cameras[0])  
+    #webcam = pygame.camera.Camera(cameras[0])
+    #webcam.start()
    
     # Display a frame
-    img = webcam.get_image()
-    WIDTH = img.get_width()
-    HEIGHT = img.get_height()
+    _,img = cap.read()
+    #_,img=cv2.rotate(src, cv2.ROTATE_90_CLOCKWISE)
+    WIDTH = img.shape[0]
+    HEIGHT = img.shape[1]
     screen = pygame.display.set_mode( ( WIDTH, HEIGHT ) )
-    img = webcam.get_image()
+    _,img = cap.read()
+    img =  pygame.surfarray.make_surface(img)
     screen.blit(img, (0,0))
 
     disp_score(score, score_font, 10, 10)
@@ -317,7 +328,8 @@ while run:
     clock_text = font.render(str(clock_counter), True, (0, 25, 0))
 
     for num in range(clock_counter,0,-1):
-      img = webcam.get_image()
+      _,img_array = cap.read()
+      img =  pygame.surfarray.make_surface(img_array)
       screen.blit(img, (0,0))
 
       draw_text("Your letter is: " + small_letter, font, blue_col, 150, 0)
@@ -334,22 +346,23 @@ while run:
       # At Countdown = 0, take a picture
       if clock_counter == 0:
        
-       img = webcam.get_image()
+       _,img_array = cap.read()
+       img =  pygame.surfarray.make_surface(img_array)
        screen.blit(img, (0,0))
        get_ready = pose_font.render("Pose!", True, white_col)
        get_ready_rect = get_ready.get_rect(center = screen.get_rect().center)
        screen.blit(get_ready, get_ready_rect)
        pygame.time.set_timer(timer_event, 0) # set to 0 means end countdown  
-       filename = os.path.join(directory,"image.jpeg")
-       pygame.image.save(img, filename) #don't have to save because you just want to use it and send it to stella's
+       #filename = os.path.join(directory,"image.jpeg")
+       #pygame.image.save(img, filename) #don't have to save because you just want to use it and send it to stella's
        #pretty_background = pygame.transform.scale(pretty_background, (WIDTH, HEIGHT))
        screen_display.update()
        pygame.time.delay(2000)
        
        # Now send picture to Stella's function
-       stella_func = random.randint(-1, 1)
+       #stella_func = random.randint(-1, 1)
      # if copy_of_classifier(img) == small_letter: !!!!!!!!!!!!!!!!!! Integration?
-       if stella_func > 0:
+       if prediction(img_array) == small_letter:
        #if prediction(img) == small_letter: 
         screen.fill(black_col)
          #  ADD POINTS
