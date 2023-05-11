@@ -369,3 +369,4 @@ while run:
 
 
 
+#pretty_background = pygame.transform.scale(pretty_background, (640, 400))

@@ -1,6 +1,4 @@
 # TO DO:
-# add point tracker system
-# edit interface design
 # Add comments / clean up
 
 import pygame
@@ -13,7 +11,8 @@ import pygame.image
 import os
 import sys
 import random
-#import copy_of_classifier
+import import_pickle
+import cv2
 
 # Start Pygame
 pygame.init()
@@ -54,9 +53,8 @@ quit_button = button.Button(400, 400, quit_img, 0.4)
 main_menu_background = pygame.image.load("images/asl_background.jpeg").convert_alpha()
 main_menu_background = pygame.transform.scale(main_menu_background, (640, 400))
 pretty_background = pygame.image.load("images/game_background.jpeg").convert_alpha() 
-#pretty_background = pygame.transform.scale(pretty_background, (640, 400))
 
-# Game pictures
+# Game pictures ################################################################
 bear_head = pygame.image.load("images/bear_head.png").convert_alpha()
 bear_honey = pygame.image.load("images/bear_honey.png").convert_alpha()
 bear_honey = pygame.transform.scale(bear_honey, (80, 80))
@@ -77,7 +75,6 @@ full_heart = pygame.transform.scale(full_heart, (30, 30))
 heart = pygame.image.load("images/heart.png").convert_alpha()
 heart = pygame.transform.scale(heart, (30, 30))
 
-
 honey = pygame.image.load("images/honey.png").convert_alpha()
 honey = pygame.transform.scale(honey, (50, 50))
 
@@ -96,6 +93,9 @@ minus_40 = pygame.transform.scale(minus_40, (30, 30))
 sleepy_bear = pygame.image.load("images/sleepy_bear.png").convert_alpha()
 sleepy_bear = pygame.transform.scale(sleepy_bear, (350,350))
 
+########################################################################
+
+# Shortcut functions
 
 def draw_text(text, font, text_col, x, y): # Draws text onto screen, call this so you don't have to 'blit' text every time
   img = font.render(text, True, text_col)
@@ -118,7 +118,7 @@ clock.tick(60) # 60 frames can pass per sec (max)
 
 # Score Keeping
 score = 0
-hits = 5
+hits = 6
 score_inc = 10
 
 #game loop
@@ -203,10 +203,11 @@ while run:
       screen.blit(sleepy_bear, (150,100))
       pygame.display.flip()
       pygame.time.delay(5000)
-      # score = 0
-      # hits = 0
-      sys.exit()
-
+      score = 0
+      hits = 0
+      pygame.time.delay(500)
+      game_paused = True
+      #sys.exit() # could quit game or could try again (uncomment above)
 
 #    pygame.draw.rect(screen, purple_col, (0, 450, 640, 80))
     pygame.draw.rect(screen, black_col, (0, 445, 200, 30))
@@ -288,10 +289,10 @@ while run:
        pygame.time.delay(2000)
        
        # Now send picture to Stella's function
-       stella_func = random.randint(-1, 1)
+       #stella_func = random.randint(-1, 1)
      # if copy_of_classifier(img) == small_letter: !!!!!!!!!!!!!!!!!! Integration?
-       
-       if stella_func > 0:
+      # if stella_func > 0:
+       if import_pickle(img) == small_letter:
          screen.fill(black_col)
          #  ADD POINTS
          score += score_inc

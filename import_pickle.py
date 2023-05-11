@@ -5,7 +5,7 @@ import sklearn
 file = open('clf.sav', 'rb')
 
 # dump information to that file
-data = pickle.load(file)
+clf = pickle.load(file)
 
 # close the file
 file.close()
