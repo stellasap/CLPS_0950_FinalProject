@@ -11,6 +11,9 @@ from get_letter import get_letter
 import pygame.camera
 import pygame.image
 import os
+import sys
+import random
+#import copy_of_classifier
 
 # Start Pygame
 pygame.init()
@@ -58,7 +61,6 @@ bear_head = pygame.image.load("images/bear_head.png").convert_alpha()
 bear_honey = pygame.image.load("images/bear_honey.png").convert_alpha()
 bear_honey = pygame.transform.scale(bear_honey, (80, 80))
 
-
 bear_w_heart = pygame.image.load("images/bear_heart.png").convert_alpha()
 bear_w_heart = pygame.transform.scale(bear_w_heart, (300,300))
 
@@ -70,6 +72,7 @@ empty_heart = pygame.transform.scale(empty_heart, (30, 30))
 
 footpath = pygame.image.load("images/footpath.png").convert_alpha()
 full_heart = pygame.image.load("images/full_heart.png").convert_alpha()
+full_heart = pygame.transform.scale(full_heart, (30, 30))
 
 heart = pygame.image.load("images/heart.png").convert_alpha()
 heart = pygame.transform.scale(heart, (30, 30))
@@ -89,6 +92,10 @@ minus_30 = pygame.transform.scale(minus_30, (30, 30))
 
 minus_40 = pygame.image.load("images/minus_40.png").convert_alpha()
 minus_40 = pygame.transform.scale(minus_40, (30, 30))
+
+sleepy_bear = pygame.image.load("images/sleepy_bear.png").convert_alpha()
+sleepy_bear = pygame.transform.scale(sleepy_bear, (350,350))
+
 
 def draw_text(text, font, text_col, x, y): # Draws text onto screen, call this so you don't have to 'blit' text every time
   img = font.render(text, True, text_col)
@@ -111,7 +118,7 @@ clock.tick(60) # 60 frames can pass per sec (max)
 
 # Score Keeping
 score = 0
-hits = 0
+hits = 5
 score_inc = 10
 
 #game loop
@@ -150,28 +157,22 @@ while run:
     screen.blit(footpath, (0,410))
     screen.blit(cute_bear, (575, 370))
     screen.blit(heart, (590, 340))
-    screen.blit(empty_heart, (590, 340))
-    screen.fill(black_col)
-    draw_text("You killed Bruno >.< !!", font, white_col, 0, 0)
-    draw_text("HOW COULD YOU!!", font, white_col, 0, 30)
-    draw_text("keep practicing :)", font, white_col, 0, 55)
     pygame.display.flip()
-    pygame.time.delay(5000)
 
   # Moving the honey
 
     if score == 0:
       screen.blit(honey, (0,370))
     elif score == 10:
-      screen.blit(honey, (100,400))
+      screen.blit(honey, (100,370))
     elif score == 20:
-      screen.blit(honey, (200,400))
+      screen.blit(honey, (200,370))
     elif score == 30:
-      screen.blit(honey, (300,400))
+      screen.blit(honey, (300,370))
     elif score == 40:
-      screen.blit(honey, (400,400))
+      screen.blit(honey, (400,370))
     elif score == 50:
-      screen.blit(honey, (500,400))
+      screen.blit(honey, (500,370))
     elif score == 60:
       screen.blit(bear_honey, (570, 370))
     elif score >= 70:
@@ -181,6 +182,7 @@ while run:
       screen.blit(bear_w_heart, (180,100))
       pygame.display.flip()
       pygame.time.delay(5000)
+      heart = full_heart
 
 # If you make a mistake, you hurt Bruno's heart!
     if hits == 1:
@@ -195,22 +197,22 @@ while run:
       screen.blit(empty_heart, (590, 340))
     if hits == 6:
       screen.fill(black_col)
-      draw_text("You killed Bruno >.< !! HOW COULD YOU!! ", font, white_col, 0, 0)
-      draw_text("keep practicing :)", font, white_col, 0, 30)
+      draw_text("You killed Bruno >.< !!", font, white_col, 5, 0)
+      draw_text("HOW COULD YOU!! ", font, white_col, 5, 40)
+      draw_text("Try again! :)", font, white_col, 5, 80)
+      screen.blit(sleepy_bear, (150,100))
       pygame.display.flip()
       pygame.time.delay(5000)
-
-    
+      # score = 0
+      # hits = 0
+      sys.exit()
 
 
 #    pygame.draw.rect(screen, purple_col, (0, 450, 640, 80))
     pygame.draw.rect(screen, black_col, (0, 445, 200, 30))
     disp_score(score, score_font, 10, 450) # (width, height)
     
-
-
-
-    
+    # Display letter
     letter = get_letter(1)
     small_letter = letter # to be displayed with webcame footage
     letter_font = pygame.font.SysFont("antiquewhite", 650)
@@ -244,7 +246,11 @@ while run:
     pygame.display.flip()
     
     # (For Debugging purposes): now image will be sent to images folder so we can check that it's screenshotting at the right time
-    directory = r'/Users/camilleaquino/Documents/GitHub/CLPS_0950_FinalProject/images/'
+    camille = True
+    if camille:
+      directory = r'/Users/camilleaquino/Documents/GitHub/CLPS_0950_FinalProject/images/'
+    else: 
+      directory = r'/Users/stylianisapantzi/Documents/GitHub/CLPS_0950_FinalProject/images/' # is this her path? !!!!!
 
     # Starting Countdown from 5, person has time to adjust their hand shape
     event.type == timer_event
@@ -277,43 +283,32 @@ while run:
        pygame.time.set_timer(timer_event, 0) # set to 0 means end countdown  
        filename = os.path.join(directory,"image.jpeg")
        pygame.image.save(img, filename) #don't have to save because you just want to use it and send it to stella's
-       pretty_background = pygame.transform.scale(pretty_background, (WIDTH, HEIGHT))
+       #pretty_background = pygame.transform.scale(pretty_background, (WIDTH, HEIGHT))
        screen_display.update()
        pygame.time.delay(2000)
        
        # Now send picture to Stella's function
-       # stella_func(img, small_letter)
-
-
-       stella_func = True
-       if stella_func:
+       stella_func = random.randint(-1, 1)
+     # if copy_of_classifier(img) == small_letter: !!!!!!!!!!!!!!!!!! Integration?
+       
+       if stella_func > 0:
          screen.fill(black_col)
-        
+         #  ADD POINTS
          score += score_inc
          disp_score(score, score_font, 10, 10)
 
          draw_text("CORRECT!", bigger_font_true, green_col, 0, 168)
          pygame.time.delay(2000)
-      
-
-
-        #  ADD POINTS
-
 
        else:
         screen.fill(black_col)
-        
+         # SUBTRACT POINTS
         score -= score_inc
         disp_score(score, score_font, 10, 10)
-        
+        hits+=1
         draw_text("INCORRECT!", bigger_font_false, red_col, 0, 168)
         pygame.time.delay(2000)
-        
-        # SUBTRACT POINTS
-
-          # NEXT STEPS: add points bar whenever game is unpaused
-          # when person fills up the bar they win the game, load "YOU WIN! on screen??
-
+      
 #################################
 
   #event handler
