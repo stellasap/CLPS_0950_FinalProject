@@ -350,10 +350,10 @@ while run:
        pygame.time.delay(2000)
        
        # Now send picture to Stella's function
-       stella_func = random.randint(-1,5)
+       stella_func = 1#random.randint(-1,5)
 
      # if copy_of_classifier(img) == small_letter: !!!!!!!!!!!!!!!!!! Integration?
-       if stella_func > 1:  #| small_letter = 'B' | small_letter = 'C' | small_letter = 'D' | small_letter = 'E' | small_letter = 'F'| small_letter = 'G' | small_letter == 'H' :
+       if stella_func > 0:  #| small_letter = 'B' | small_letter = 'C' | small_letter = 'D' | small_letter = 'E' | small_letter = 'F'| small_letter = 'G' | small_letter == 'H' :
        #if prediction(img) == small_letter: 
         screen.fill(black_col)
          #  ADD POINTS
